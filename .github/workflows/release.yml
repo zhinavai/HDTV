@@ -35,6 +35,11 @@ jobs:
           EOF
           ls -l .signing/
 
+      - name: Override versionName
+        run: |
+          sed -i "s/versionName '1.8.0'/versionName '1.8.${{ github.run_number }}'/" app/build.gradle
+          grep versionName app/build.gradle
+
       - name: Grant execute permission
         run: chmod +x ./gradlew
 
