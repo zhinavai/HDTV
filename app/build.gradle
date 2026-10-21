@@ -68,7 +68,7 @@ android {
             buildConfigField 'String', 'CJS_PLUGIN_ABI', '"armeabi-v7a"'
             buildConfigField 'String', 'UPDATE_APK_URL_FIELD', '"apk32Url"'
             buildConfigField 'String', 'UPDATE_SHA256_FIELD', '"sha25632"'
-            buildConfigField 'String', 'UPDATE_APK_ASSET', '"nTv.apk"'
+            buildConfigField 'String', 'UPDATE_APK_ASSET', '"app-arm32-release.apk"'
         }
         arm64 {
             dimension 'architecture'
@@ -78,7 +78,7 @@ android {
             buildConfigField 'String', 'CJS_PLUGIN_ABI', '"arm64-v8a"'
             buildConfigField 'String', 'UPDATE_APK_URL_FIELD', '"apk64Url"'
             buildConfigField 'String', 'UPDATE_SHA256_FIELD', '"sha25664"'
-            buildConfigField 'String', 'UPDATE_APK_ASSET', '"nTv64.apk"'
+            buildConfigField 'String', 'UPDATE_APK_ASSET', '"app-arm64-release.apk"'
         }
         x86 {
             dimension 'architecture'
@@ -87,7 +87,7 @@ android {
             buildConfigField 'String', 'CJS_PLUGIN_ABI', '"x86"'
             buildConfigField 'String', 'UPDATE_APK_URL_FIELD', '"apkX86Url"'
             buildConfigField 'String', 'UPDATE_SHA256_FIELD', '"sha256X86"'
-            buildConfigField 'String', 'UPDATE_APK_ASSET', '"nTvX86.apk"'
+            buildConfigField 'String', 'UPDATE_APK_ASSET', '"app-x86-release.apk"'
         }
     }
 
@@ -234,9 +234,9 @@ task generateVersionFile {
         }
         String releaseBase = 'https://github.com/zhinavai/HDTV/releases/latest/download/'
         // Keep the release asset names compatible with already shipped updaters.
-        String apk32Asset = 'nTv.apk'
-        String apk64Asset = 'nTv64.apk'
-        String apkX86Asset = 'nTvX86.apk'
+        String apk32Asset = 'app-arm32-release.apk'
+        String apk64Asset = 'app-arm64-release.apk'
+        String apkX86Asset = 'app-x86-release.apk'
 
         def manifest = [
                 versionCode : android.defaultConfig.versionCode,
