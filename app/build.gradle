@@ -232,7 +232,7 @@ task generateVersionFile {
         if (!sha25632 || !sha25664 || !sha256X86) {
             throw new GradleException('-PupdateApk32, -PupdateApk64 and -PupdateApkX86 are required')
         }
-        String releaseBase = 'https://github.com/buhanzhe/NativeWasmTv/releases/latest/download/'
+        String releaseBase = 'https://github.com/zhinavai/HDTV/releases/latest/download/'
         // Keep the release asset names compatible with already shipped updaters.
         String apk32Asset = 'nTv.apk'
         String apk64Asset = 'nTv64.apk'
