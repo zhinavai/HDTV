@@ -23,26 +23,22 @@ jobs:
       - name: Create local.properties
         run: echo "sdk.dir=$ANDROID_HOME" > local.properties
 
-      - name: Decode signing key
+      - name: Prepare signing files
         run: |
-          echo "${{ secrets.SIGNING_KEY }}" | base64 -d > my-release.p12
-          ls -l my-release.p12
+          mkdir -p .signing
+          echo "${{ secrets.SIGNING_KEY }}" | base64 -d > .signing/iptv-release.jks
+          cat > .signing/keystore-info.properties <<EOF
+          alias=${{ secrets.KEY_ALIAS }}
+          storePassword=${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword=${{ secrets.KEY_PASSWORD }}
+          EOF
+          ls -l .signing/
 
       - name: Grant execute permission
         run: chmod +x ./gradlew
 
       - name: Build Signed Release APK
-        env:
-          SIGNING_STORE_FILE: ${{ github.workspace }}/my-release.p12
-          SIGNING_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
-          SIGNING_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          SIGNING_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: |
-          ./gradlew assembleRelease --no-daemon \
-            -Pandroid.injected.signing.store.file=$SIGNING_STORE_FILE \
-            -Pandroid.injected.signing.store.password=$SIGNING_STORE_PASSWORD \
-            -Pandroid.injected.signing.key.alias=$SIGNING_KEY_ALIAS \
-            -Pandroid.injected.signing.key.password=$SIGNING_KEY_PASSWORD
+        run: ./gradlew assembleRelease --no-daemon
 
       - name: Upload APKs
         uses: actions/upload-artifact@v4
@@ -50,5 +46,4 @@ jobs:
           name: signed-release-apk
           path: |
             app/build/outputs/apk/release/*.apk
-            output/*.apk
           if-no-files-found: warn
