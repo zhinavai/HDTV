@@ -44,19 +44,28 @@ jobs:
       - name: Find APK files
         run: find app/build/outputs/apk -name "*.apk" -type f
 
-      - name: Generate version manifest
+      - name: Generate version manifests
         run: |
           ./gradlew generateVersionFile --no-daemon \
             -PversionCodeOverride=${{ github.run_number }} \
+            -PimportantUpdate=true \
             -PupdateApk32=app/build/outputs/apk/arm32/release/app-arm32-release.apk \
             -PupdateApk64=app/build/outputs/apk/arm64/release/app-arm64-release.apk \
             -PupdateApkX86=app/build/outputs/apk/x86/release/app-x86-release.apk
 
-      - name: Upload APKs and manifest
+      - name: Show generated manifests
+        run: |
+          echo "=== version-lite.json ==="
+          cat version-lite.json
+          echo "=== version.json ==="
+          cat version.json
+
+      - name: Upload APKs and manifests
         uses: actions/upload-artifact@v4
         with:
           name: signed-release-apk
           path: |
             app/build/outputs/apk/**/*.apk
             version-lite.json
+            version.json
           if-no-files-found: warn
