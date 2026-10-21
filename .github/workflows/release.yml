@@ -1,11 +1,6 @@
-name: Build Signed Release APK
-
-on:
-  workflow_dispatch:
-
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout
@@ -17,11 +12,12 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Create local.properties
-        run: echo "sdk.dir=$ANDROID_HOME" > local.properties
+        run: |
+          SDK_DIR="${ANDROID_HOME:-$ANDROID_SDK_ROOT}"
+          echo "sdk.dir=$SDK_DIR" > local.properties
+          echo "SDK dir: $SDK_DIR"
+          ls "$SDK_DIR"
 
       - name: Prepare signing files
         run: |
